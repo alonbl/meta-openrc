@@ -14,10 +14,11 @@ S = "${WORKDIR}/git"
 
 inherit meson
 
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'audit pam selinux usrmerge', d)}"
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'audit capabilities pam selinux usrmerge', d)}"
 
 PACKAGECONFIG[audit] = "-Daudit=enabled,-Daudit=disabled,audit"
 PACKAGECONFIG[bash-completions] = "-Dbash-completions=true,-Dbash-completions=false,bash-completion"
+PACKAGECONFIG[capabilities] = "-Dcapabilities=enabled, -Dcapabilities=disabled, libcap"
 PACKAGECONFIG[pam] = "-Dpam=true,-Dpam=false,libpam"
 PACKAGECONFIG[selinux] = "-Dselinux=enabled,-Dselinux=disabled,libselinux"
 PACKAGECONFIG[usrmerge] = "-Drootprefix=/usr,-Drootprefix=/"
@@ -98,6 +99,7 @@ RDEPENDS:${PN} = " \
     util-linux-mount \
     util-linux-umount \
 "
+RDEPENDS[capabilities] += "libcap"
 
 RCONFLICTS:${PN} = " \
     init-ifupdown \
